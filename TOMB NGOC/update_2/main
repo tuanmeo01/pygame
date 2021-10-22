@@ -1,4 +1,5 @@
 import pygame
+from pygame import image
 from pygame.locals import *
 from pygame import mixer
 import pickle
@@ -27,7 +28,7 @@ font_score = pygame.font.SysFont('Bauhaus 93', 30)
 tile_size = 15
 game_over = 0
 main_menu = True
-level = 3
+level = 1
 max_levels = 7
 score = 0
 
@@ -58,10 +59,9 @@ def draw_text(text, font, text_col, x, y):
 	img = font.render(text, True, text_col)
 	screen.blit(img, (x, y))
 
-
 #function to reset level
 def reset_level(level):
-	player.reset(100, screen_height - 130)
+	player.reset(80, 525)
 	blob_group.empty()
 	platform_group.empty()
 	coin_group.empty()
@@ -116,8 +116,8 @@ class Player():
 	def update(self, game_over):
 		dx = 0
 		dy = 0
-		walk_cooldown = 5
-		col_thresh = 40
+		# walk_cooldown = 5
+		# col_thresh = 40
 
 		if game_over == 0:
 			#get keypresses
@@ -132,7 +132,7 @@ class Player():
 				dy += 5
 				
 			#check for collision
-			self.in_air = True
+			# self.in_air = True
 			for tile in world.tile_list:
 				#check for collision in x direction
 				if tile[1].colliderect(self.rect.x + dx, self.rect.y, 15, 15):
@@ -175,25 +175,25 @@ class Player():
 
 	def reset(self, x, y):
 		self.images_right = []
-		self.images_left = []
+		# self.images_left = []
 		self.index = 0
 		self.counter = 0
 		img_right = pygame.image.load(f'img/nhanvat.png')
 		img_right = pygame.transform.scale(img_right, (15, 15))
-		img_left = pygame.transform.flip(img_right, True, False)
+		# img_left = pygame.transform.flip(img_right, True, False)
 		self.images_right.append(img_right)
-		self.images_left.append(img_left)
+		# self.images_left.append(img_left)
 		self.dead_image = pygame.image.load('img/ghost.png')
 		self.image = self.images_right[self.index]
 		self.rect = self.image.get_rect()
 		self.rect.x = x
 		self.rect.y = y
-		self.width = self.image.get_width()
-		self.height = self.image.get_height()
-		self.vel_y = 0
-		self.jumped = False
-		self.direction = 0
-		self.in_air = True
+		# self.width = self.image.get_width()
+		# self.height = self.image.get_height()
+		# self.vel_y = 0
+		# self.jumped = False
+		# self.direction = 0
+		# self.in_air = True
 
 
 
@@ -224,7 +224,7 @@ class World():
 					tile = (img, img_rect)
 					self.tile_list.append(tile)
 				if tile == 3:
-					blob = Enemy(col_count * tile_size, row_count * tile_size + 15)
+					blob = Enemy(col_count * tile_size, row_count * tile_size)
 					blob_group.add(blob)
 				if tile == 6:
 					lava = Lava(col_count * tile_size, row_count * tile_size + (tile_size // 2))
@@ -233,7 +233,7 @@ class World():
 					coin = Coin(col_count * tile_size + (tile_size // 2), row_count * tile_size + (tile_size // 2))
 					coin_group.add(coin)
 				if tile == 8:
-					exit = Exit(col_count * tile_size, row_count * tile_size - (tile_size // 2))
+					exit = Exit(col_count * tile_size, row_count * tile_size)
 					exit_group.add(exit)
 				col_count += 1
 			row_count += 1
@@ -249,6 +249,7 @@ class Enemy(pygame.sprite.Sprite):
 	def __init__(self, x, y):
 		pygame.sprite.Sprite.__init__(self)
 		self.image = pygame.image.load('img/shooterOpen.png')
+		self.image = pygame.transform.scale(self.image, (tile_size, tile_size))
 		self.rect = self.image.get_rect()
 		self.rect.x = x
 		self.rect.y = y
@@ -285,7 +286,7 @@ class Exit(pygame.sprite.Sprite):
 	def __init__(self, x, y):
 		pygame.sprite.Sprite.__init__(self)
 		img = pygame.image.load('img/goal.png')
-		self.image = pygame.transform.scale(img, (tile_size, int(tile_size * 1.5)))
+		self.image = pygame.transform.scale(img, (tile_size,tile_size))
 		self.rect = self.image.get_rect()
 		self.rect.x = x
 		self.rect.y = y
