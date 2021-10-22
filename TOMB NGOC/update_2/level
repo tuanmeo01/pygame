@@ -22,16 +22,16 @@ pygame.display.set_caption('Level Editor')
 #load images
 sun_img = pygame.image.load('img/sun.png')
 sun_img = pygame.transform.scale(sun_img, (tile_size, tile_size))
-bg_img = pygame.image.load('img/sky.png')
+bg_img = pygame.image.load('img/sao.jpg')
 bg_img = pygame.transform.scale(bg_img, (screen_width, screen_height - margin))
-dirt_img = pygame.image.load('img/dirt.png')
-grass_img = pygame.image.load('img/grass.png')
-blob_img = pygame.image.load('img/blob.png')
+dirt_img = pygame.image.load('img/brick.png')
+grass_img = pygame.image.load('img/brick.png')
+blob_img = pygame.image.load('img/shooterOpen.png')
 platform_x_img = pygame.image.load('img/platform_x.png')
 platform_y_img = pygame.image.load('img/platform_y.png')
-lava_img = pygame.image.load('img/lava.png')
+lava_img = pygame.image.load('img/hiddenSpikes.png')
 coin_img = pygame.image.load('img/coin.png')
-exit_img = pygame.image.load('img/exit.png')
+exit_img = pygame.image.load('img/goal.png')
 save_img = pygame.image.load('img/save_btn.png')
 load_img = pygame.image.load('img/load_btn.png')
 
@@ -48,13 +48,13 @@ font = pygame.font.SysFont('Futura', 24)
 
 #create empty tile list
 world_data = []
-for row in range(40):
-	r = [0] * 40
+for row in range(41):
+	r = [0] * 41
 	world_data.append(r)
 
 #create boundary
 for tile in range(0, 40):
-	world_data[39][tile] = 2
+	world_data[39][tile] = 1
 	world_data[0][tile] = 1
 	world_data[tile][0] = 1
 	world_data[tile][39] = 1
@@ -65,7 +65,7 @@ def draw_text(text, font, text_col, x, y):
 	screen.blit(img, (x, y))
 
 def draw_grid():
-	for c in range(41):
+	for c in range(0,40):
 		#vertical lines
 		pygame.draw.line(screen, white, (c * tile_size, 0), (c * tile_size, screen_height - margin))
 		#horizontal lines
@@ -86,8 +86,8 @@ def draw_world():
 					screen.blit(img, (col * tile_size, row * tile_size))
 				if world_data[row][col] == 3:
 					#enemy blocks
-					img = pygame.transform.scale(blob_img, (tile_size, int(tile_size * 0.75)))
-					screen.blit(img, (col * tile_size, row * tile_size + (tile_size * 0.25)))
+					img = pygame.transform.scale(blob_img, (tile_size, tile_size))
+					screen.blit(img, (col * tile_size, row * tile_size ))
 				if world_data[row][col] == 4:
 					#horizontally moving platform
 					img = pygame.transform.scale(platform_x_img, (tile_size, tile_size // 2))
@@ -106,8 +106,8 @@ def draw_world():
 					screen.blit(img, (col * tile_size + (tile_size // 4), row * tile_size + (tile_size // 4)))
 				if world_data[row][col] == 8:
 					#exit
-					img = pygame.transform.scale(exit_img, (tile_size, int(tile_size * 1.5)))
-					screen.blit(img, (col * tile_size, row * tile_size - (tile_size // 2)))
+					img = pygame.transform.scale(exit_img, (tile_size,tile_size))
+					screen.blit(img, (col * tile_size, row * tile_size ))
 
 
 
